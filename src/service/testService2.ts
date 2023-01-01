@@ -1,5 +1,5 @@
 import { Observer } from "../util/Observer";
-import { Autowired } from "../util/TSBeamContainer";
+import { Autowired, TSBeamContainer } from "../util/TSBeamContainer";
 
 export class TestService2 {
   @Autowired(Observer)
@@ -11,5 +11,6 @@ export class TestService2 {
   public static testMethod() {
     console.log("observer from testservice 2 : " + this.observer.count);
     console.log("observer2 from testservice 2 : " + this.observer2.count);
+    // console.log(TSBeamContainer.getDependencies());
   }
 }

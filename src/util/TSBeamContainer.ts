@@ -7,18 +7,27 @@ export class TSBeamContainer {
     this.dependencies[key] = object;
   }
 
+  //for test purposes, will be removed later
+  public static getDependencies() {
+    return this.dependencies;
+  }
+
   public static getDependency(key: string, constructor: any): ITSBeam {
-    if (this.dependencies[key] == null) {
-      this.addDependency({ key, object: new constructor() });
+    const dependencyKey = key ?? constructor.name;
+    if (this.dependencies[dependencyKey] == null) {
+      this.addDependency({ key: dependencyKey, object: new constructor() });
     }
-    return this.dependencies[key];
+    return this.dependencies[dependencyKey];
   }
 }
 
 export function Autowired(classTemplate: any, key?: string) {
-  return function (target: ITSBeam, propertyKey: string) {
+  return function (target: any, propertyKey: string) {
     const getter = () => {
-      return TSBeamContainer.getDependency(key, classTemplate);
+      return TSBeamContainer.getDependency(
+        key,
+        Object.getPrototypeOf(classTemplate)
+      );
     };
     Object.defineProperty(target, propertyKey, {
       get: getter,
