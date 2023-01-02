@@ -1,7 +1,6 @@
-import { ITSBeam, TSBeam } from "./TSBeam";
 
 export class TSBeamContainer {
-  private static dependencies: { [key: string]: ITSBeam } = {};
+  private static dependencies: { [key: string]: any } = {};
 
   private static addDependency({ key, object }) {
     this.dependencies[key] = object;
@@ -12,7 +11,7 @@ export class TSBeamContainer {
     return this.dependencies;
   }
 
-  public static getDependency(key: string, constructor: any): ITSBeam {
+  public static getDependency(key: string, constructor: any): any {
     const dependencyKey = key ?? constructor.name;
     if (this.dependencies[dependencyKey] == null) {
       this.addDependency({ key: dependencyKey, object: new constructor() });
@@ -22,11 +21,12 @@ export class TSBeamContainer {
 }
 
 export function Autowired(classTemplate: any, key?: string) {
+  console.log(classTemplate)
   return function (target: any, propertyKey: string) {
     const getter = () => {
       return TSBeamContainer.getDependency(
         key,
-        Object.getPrototypeOf(classTemplate)
+        classTemplate
       );
     };
     Object.defineProperty(target, propertyKey, {
