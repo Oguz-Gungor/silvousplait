@@ -21,7 +21,6 @@ export class TSBeamContainer {
 }
 
 export function Autowired(classTemplate: any, key?: string) {
-  console.log(classTemplate)
   return function (target: any, propertyKey: string) {
     const getter = () => {
       return TSBeamContainer.getDependency(
